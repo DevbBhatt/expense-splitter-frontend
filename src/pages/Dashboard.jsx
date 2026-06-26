@@ -6,16 +6,19 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Loading from "../components/Loading";
 import GroupCard from "../components/GroupCard";
+import CreateGroupModal from "../components/CreateGroupModal";
 
 function Dashboard() {
 
     const [groups, setGroups] = useState([]);
-
     const [loading, setLoading] = useState(true);
+    const [showModal, setShowModal] = useState(false);
 
     const loadGroups = async () => {
 
         try {
+
+            setLoading(true);
 
             const response = await api.get("/groups?page=0&size=10");
 
@@ -58,20 +61,17 @@ function Dashboard() {
                         <div>
 
                             <h1 className="text-4xl font-bold">
-
                                 Welcome 👋
-
                             </h1>
 
                             <p className="text-gray-600 mt-2">
-
                                 Manage your expense groups.
-
                             </p>
 
                         </div>
 
                         <button
+                            onClick={() => setShowModal(true)}
                             className="bg-blue-600 text-white px-5 py-3 rounded-lg hover:bg-blue-700"
                         >
                             + Create Group
@@ -84,15 +84,12 @@ function Dashboard() {
                         {
                             loading
                                 ?
-
                                 <Loading />
-
                                 :
-
                                 <div className="grid grid-cols-3 gap-8">
 
                                     {
-                                        groups.map(group => (
+                                        groups.map((group) => (
 
                                             <GroupCard
                                                 key={group.id}
@@ -111,6 +108,20 @@ function Dashboard() {
                 </div>
 
             </div>
+
+            {
+                showModal && (
+
+                    <CreateGroupModal
+
+                        onClose={() => setShowModal(false)}
+
+                        onGroupCreated={loadGroups}
+
+                    />
+
+                )
+            }
 
         </div>
 
