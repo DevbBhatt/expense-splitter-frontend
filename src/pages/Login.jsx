@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import { toast } from "react-toastify";
 
 function Login() {
 
@@ -13,10 +14,9 @@ function Login() {
 
         // Basic Validation
         if (!email || !password) {
-            alert("Please enter email and password");
+            toast.warning("Please enter email and password");
             return;
         }
-
         try {
 
             const response = await api.post("/auth/login", {
@@ -29,7 +29,7 @@ function Login() {
 
             console.log("Saved Token:", localStorage.getItem("token"));
 
-            alert("Login Successful");
+            toast.success("Login Successful");
 
             navigate("/dashboard");
 
@@ -37,7 +37,7 @@ function Login() {
 
             console.error(error);
 
-            alert(
+            toast.error(
                 error.response?.data?.message || "Login Failed"
             );
         }

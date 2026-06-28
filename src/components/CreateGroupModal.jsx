@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../services/api";
+import { toast } from "react-toastify";
 
 function CreateGroupModal({ onClose, onGroupCreated }) {
 
@@ -8,7 +9,7 @@ function CreateGroupModal({ onClose, onGroupCreated }) {
     const handleCreateGroup = async () => {
 
         if (!name.trim()) {
-            alert("Please enter group name");
+            toast.warning("Please enter group name");
             return;
         }
 
@@ -18,7 +19,7 @@ function CreateGroupModal({ onClose, onGroupCreated }) {
                 name: name
             });
 
-            alert("Group Created Successfully");
+            toast.success("Group Created Successfully");
 
             onGroupCreated();
 
@@ -28,10 +29,10 @@ function CreateGroupModal({ onClose, onGroupCreated }) {
 
             console.log(error);
 
-            alert(
+           toast.error(
                 error.response?.data?.message ||
                 "Failed to create group"
-            );
+        );
         }
 
     };

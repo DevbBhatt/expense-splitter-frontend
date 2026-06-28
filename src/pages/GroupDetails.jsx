@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import MemberTable from "../components/MemberTable";
+import ExpenseTable from "../components/ExpenseTable";
+import BalanceTable from "../components/BalanceTable";
+import SettlementTable from "../components/SettlementTable";
+import AddExpenseModal from "../components/AddExpenseModal";
 
 import api from "../services/api";
 
@@ -17,6 +22,34 @@ function GroupDetails() {
     const [group, setGroup] = useState(null);
 
     const [loading, setLoading] = useState(true);
+
+    const [members, setMembers] = useState([]);
+
+    const [expenses, setExpenses] = useState([]);
+
+    const [balances, setBalances] = useState([]);
+
+    const [settlements, setSettlements] = useState([]);
+
+    const [showExpenseModal, setShowExpenseModal] = useState(false);
+
+    const loadMembers = async () => {
+
+    try {
+
+        const response = await api.get(
+            `/groups/members/${id}?page=0&size=20`
+        );
+
+        setMembers(response.data.content);
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+};
 
     const loadGroup = async () => {
 
@@ -42,11 +75,88 @@ function GroupDetails() {
 
     };
 
+    const loadExpenses = async () => {
+
+    try {
+
+        const response = await api.get(
+            `/expenses/groups/${id}/expenses?page=0&size=20`
+        );
+
+        setExpenses(response.data.content);
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+};
+
+const loadBalances = async () => {
+
+    try {
+
+        const response = await api.get(
+            `/balances/groups/${id}/balances`
+        );
+
+        console.log("Full Response:", response);
+        console.log("Response Data:", response.data);
+        console.log("Is Array:", Array.isArray(response.data));
+
+        setBalances(response.data);
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+};
+
+const loadSettlements = async () => {
+
+    try {
+
+        const response = await api.get(
+            `/balances/groups/${id}/settlements`
+        );
+
+        setSettlements(response.data);
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+};
+
+
+
+
     useEffect(() => {
 
-        loadGroup();
+    loadGroup();
+    loadExpenses();
+    loadMembers();
+    loadBalances();
+    loadSettlements();
 
-    }, []);
+}, []);
+
+const refreshData = () => {
+
+    loadExpenses();
+
+    loadBalances();
+
+    loadSettlements();
+
+};
+
+
 
     return (
 
@@ -66,22 +176,61 @@ function GroupDetails() {
                     >
                         ← Back
                     </button>
+                    <button
 
+    onClick={() => setShowExpenseModal(true)}
+
+    className="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 mb-6 ml-3"
+
+>
+
+    + Add Expense
+
+</button>
                     {
 
                         loading ?
 
-                            <Loading />
+                        <Loading />
 
-                            :
+                    :
 
-                            <GroupInfo group={group} />
+                            <>
+
+                        <GroupInfo group={group} />
+
+                        <MemberTable members={members} />
+
+                        <ExpenseTable
+                            expenses={expenses}
+                            onExpenseDeleted={refreshData}
+                        />
+                        <BalanceTable balances={balances} />
+
+                        <SettlementTable settlements={settlements} />
+
+    </>
 
                     }
 
                 </div>
 
             </div>
+
+            {
+
+showExpenseModal && (
+
+<AddExpenseModal
+    groupId={id}
+    members={members}
+    onClose={() => setShowExpenseModal(false)}
+    onExpenseCreated={refreshData}
+/>
+
+)
+
+}
 
         </div>
 
