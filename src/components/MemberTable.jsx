@@ -40,13 +40,13 @@ function MemberTable({ members }) {
 
                                 <td className="py-3">
 
-                                    {member.user.name}
+                                    {member.userName}
 
                                 </td>
 
                                 <td className="py-3">
 
-                                    {member.user.email}
+                                    {member.userEmail}
 
                                 </td>
 

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Signup from "./pages/Signup";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -7,6 +8,7 @@ import GroupDetails from "./pages/GroupDetails";
 import AddExpense from "./pages/AddExpense";
 import Balances from "./pages/Balances";
 import Profile from "./pages/Profile";
+import PublicRoute from "./components/PublicRoute";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -18,7 +20,8 @@ function App() {
 
       <Routes>
 
-        <Route path="/" element={<Login />} />
+        <Route  path="/" element={ <PublicRoute> <Login /> </PublicRoute>}/>
+        <Route path="/signup"element={<PublicRoute> <Signup /></PublicRoute> }/>
 
         <Route
           path="/dashboard"

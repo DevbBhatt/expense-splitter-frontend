@@ -5,6 +5,7 @@ import ExpenseTable from "../components/ExpenseTable";
 import BalanceTable from "../components/BalanceTable";
 import SettlementTable from "../components/SettlementTable";
 import AddExpenseModal from "../components/AddExpenseModal";
+import { toast } from "react-toastify";
 
 import api from "../services/api";
 
@@ -53,27 +54,31 @@ function GroupDetails() {
 
     const loadGroup = async () => {
 
-        try {
+    try {
 
-            const response = await api.get(`/groups/${id}`);
+        const response = await api.get(`/groups/${id}`);
 
-            setGroup(response.data);
+        console.log("Group Response:", response.data);
 
-        } catch (error) {
+        setGroup(response.data);
 
-            console.log(error);
+    } catch (error) {
 
-            alert("Failed to load group");
+        console.log("Group Error:", error.response?.data);
 
-            navigate("/dashboard");
+        toast.error(
+            error.response?.data?.message || "Failed to load group"
+        );
 
-        } finally {
+        navigate("/dashboard");
 
-            setLoading(false);
+    } finally {
 
-        }
+        setLoading(false);
 
-    };
+    }
+
+};
 
     const loadExpenses = async () => {
 

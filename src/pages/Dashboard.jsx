@@ -7,6 +7,7 @@ import Sidebar from "../components/Sidebar";
 import Loading from "../components/Loading";
 import GroupCard from "../components/GroupCard";
 import CreateGroupModal from "../components/CreateGroupModal";
+import { toast } from "react-toastify";
 
 function Dashboard() {
 
@@ -28,7 +29,7 @@ function Dashboard() {
 
             console.log(error);
 
-            alert("Failed to load groups");
+            toast.error("Failed to load groups");
 
         } finally {
 
@@ -61,12 +62,25 @@ function Dashboard() {
                         <div>
 
                             <h1 className="text-4xl font-bold">
-                                Welcome 👋
+                                    Welcome 👋
                             </h1>
 
-                            <p className="text-gray-600 mt-2">
+                        <p className="text-gray-600 mt-2">
                                 Manage your expense groups.
+                        </p>
+
+                        <div className="mt-6 bg-white rounded-2xl shadow-lg p-6 w-64">
+
+                        <h2 className="text-lg text-gray-500">
+                                Total Groups
+                        </h2>
+
+                        <p className="text-4xl font-bold text-blue-600 mt-2">
+                            {groups.length}
                             </p>
+
+                        </div>
+
 
                         </div>
 
@@ -86,20 +100,38 @@ function Dashboard() {
                                 ?
                                 <Loading />
                                 :
-                                <div className="grid grid-cols-3 gap-8">
+                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
 
-                                    {
-                                        groups.map((group) => (
+    {
+        groups.length === 0 ? (
 
-                                            <GroupCard
-                                                key={group.id}
-                                                group={group}
-                                            />
+            <div className="col-span-full bg-white rounded-2xl shadow-lg p-12 text-center">
 
-                                        ))
-                                    }
+                <h2 className="text-2xl font-bold">
+                    No Groups Yet 📁
+                </h2>
 
-                                </div>
+                <p className="text-gray-500 mt-2">
+                    Create your first expense group.
+                </p>
+
+            </div>
+
+        ) : (
+
+            groups.map((group) => (
+
+                <GroupCard
+                    key={group.id}
+                    group={group}
+                />
+
+            ))
+
+        )
+    }
+
+</div>
 
                         }
 

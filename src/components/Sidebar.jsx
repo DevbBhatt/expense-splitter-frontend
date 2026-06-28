@@ -1,50 +1,72 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Sidebar() {
 
+    const location = useLocation();
+
+    const menuItems = [
+        {
+            name: "Dashboard",
+            path: "/dashboard",
+            icon: "🏠",
+        },
+        {
+            name: "Groups",
+            path: "/groups",
+            icon: "📁",
+        },
+        {
+            name: "Balances",
+            path: "/balances",
+            icon: "💰",
+        },
+        {
+            name: "Profile",
+            path: "/profile",
+            icon: "👤",
+        },
+    ];
+
     return (
 
-        <div className="w-60 bg-gray-900 text-white min-h-screen p-6">
+        <div className="w-64 bg-gray-900 text-white min-h-screen p-6 shadow-xl">
 
-            <h2 className="text-2xl font-bold mb-8">
+            <h2 className="text-3xl font-bold mb-10 text-center">
 
-                Dashboard
+                Expense Splitter
 
             </h2>
 
-            <ul className="space-y-5">
+            <ul className="space-y-3">
 
-                <li>
+                {
+                    menuItems.map((item) => (
 
-                    <Link to="/dashboard">
-                        Dashboard
-                    </Link>
+                        <li key={item.path}>
 
-                </li>
+                            <Link
+                                to={item.path}
+                                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition ${
+                                    location.pathname === item.path
+                                        ? "bg-blue-600"
+                                        : "hover:bg-gray-800"
+                                }`}
+                            >
 
-                <li>
+                                <span className="text-xl">
+                                    {item.icon}
+                                </span>
 
-                    <Link to="/groups">
-                        Groups
-                    </Link>
+                                <span className="font-medium">
+                                    {item.name}
+                                </span>
 
-                </li>
+                            </Link>
 
-                <li>
+                        </li>
 
-                    <Link to="/balances">
-                        Balances
-                    </Link>
-
-                </li>
-
-                <li>
-
-                    <Link to="/profile">
-                        Profile
-                    </Link>
-
-                </li>
+                    ))
+                }
 
             </ul>
 
