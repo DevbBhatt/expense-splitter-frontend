@@ -14,6 +14,8 @@ import Sidebar from "../components/Sidebar";
 import Loading from "../components/Loading";
 import GroupInfo from "../components/GroupInfo";
 
+import AddMemberModal from "../components/AddMemberModal";
+
 function GroupDetails() {
 
     const { id } = useParams();
@@ -34,6 +36,8 @@ function GroupDetails() {
 
     const [showExpenseModal, setShowExpenseModal] = useState(false);
 
+    const [showAddMemberModal, setShowAddMemberModal] = useState(false);    
+
     const loadMembers = async () => {
 
     try {
@@ -47,6 +51,58 @@ function GroupDetails() {
     } catch (error) {
 
         console.log(error);
+
+    }
+
+};
+
+const removeMember = async (userId) => {
+
+    if (!window.confirm("Remove this member?")) {
+        return;
+    }
+
+    try {
+
+        await api.delete(`/groups/${id}/members/${userId}`);
+
+        toast.success("Member removed successfully");
+
+        loadMembers();
+
+    } catch (error) {
+
+        console.log(error);
+
+        toast.error(
+            error.response?.data?.message || "Failed to remove member"
+        );
+
+    }
+
+};
+
+const deleteGroup = async () => {
+
+    if (!window.confirm("Delete this group?")) {
+        return;
+    }
+
+    try {
+
+        await api.delete(`/groups/${id}`);
+
+        toast.success("Group deleted successfully");
+
+        navigate("/dashboard");
+
+    } catch (error) {
+
+        console.log(error);
+
+        toast.error(
+            error.response?.data?.message || "Failed to delete group"
+        );
 
     }
 
@@ -202,9 +258,23 @@ const refreshData = () => {
 
                             <>
 
-                        <GroupInfo group={group} />
+                        <GroupInfo
+    group={group}
+    isCreator={
+        Number(localStorage.getItem("userId")) === group.createdBy.id
+    }
+    onDeleteGroup={deleteGroup}
+/>
 
-                        <MemberTable members={members} />
+              <MemberTable
+    members={members}
+    onAddMember={() => setShowAddMemberModal(true)}
+    onRemoveMember={removeMember}
+    isCreator={
+        Number(localStorage.getItem("userId")) === group.createdBy.id
+    }
+    creatorId={group.createdBy.id}
+/>
 
                         <ExpenseTable
                             expenses={expenses}
@@ -235,6 +305,21 @@ showExpenseModal && (
 
 )
 
+
+
+}
+
+{
+    showAddMemberModal && (
+
+        <AddMemberModal
+            groupId={id}
+            members={members}
+            onClose={() => setShowAddMemberModal(false)}
+            onMemberAdded={loadMembers}
+        />
+
+    )
 }
 
         </div>

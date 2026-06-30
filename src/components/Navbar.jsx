@@ -11,15 +11,16 @@ function Navbar() {
 
     const logout = () => {
 
-        localStorage.removeItem("token");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
 
-        toast.success("Logged out successfully");
+    toast.success("Logged out successfully");
 
-        setTimeout(() => {
+    setTimeout(() => {
         navigate("/");
-            }, 800);
+    }, 800);
 
-    };
+};
 
     useEffect(() => {
 

@@ -1,4 +1,8 @@
-function GroupInfo({ group }) {
+function GroupInfo({
+    group,
+    isCreator,
+    onDeleteGroup
+}) {
 
     return (
 
@@ -37,6 +41,19 @@ function GroupInfo({ group }) {
                 {new Date(group.createdAt).toLocaleString()}
 
             </p>
+
+            {
+    isCreator && (
+
+        <button
+            onClick={onDeleteGroup}
+            className="mt-6 bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg"
+        >
+            Delete Group
+        </button>
+
+    )
+}
 
         </div>
 

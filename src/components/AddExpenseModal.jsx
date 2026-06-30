@@ -203,7 +203,7 @@ function AddExpenseModal({
 
                                     <div
 
-                                        key={member.user.id}
+                                        key={member.userId}
 
                                         className="flex justify-between items-center mb-3"
 
@@ -211,7 +211,7 @@ function AddExpenseModal({
 
                                         <span>
 
-                                            {member.user.name}
+                                            {member.userName}
 
                                         </span>
 
@@ -227,7 +227,7 @@ function AddExpenseModal({
 
                                                 handleSplitChange(
 
-                                                    member.user.id,
+                                                    member.userId,
 
                                                     e.target.value
 

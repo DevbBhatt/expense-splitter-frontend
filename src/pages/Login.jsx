@@ -19,19 +19,23 @@ function Login() {
         }
         try {
 
-            const response = await api.post("/auth/login", {
-                email,
-                password
-            });
+           const response = await api.post("/auth/login", {
+    email,
+    password
+});
 
-            // Save JWT Token
-            localStorage.setItem("token", response.data.data);
+// Save JWT Token
+localStorage.setItem("token", response.data.data);
 
-            console.log("Saved Token:", localStorage.getItem("token"));
+// Current user fetch karo
+const me = await api.get("/users/me");
 
-            toast.success("Login Successful");
+// User id save karo
+localStorage.setItem("userId", me.data.id);
 
-            navigate("/dashboard");
+toast.success("Login Successful");
+
+navigate("/dashboard");
 
         } catch (error) {
 
